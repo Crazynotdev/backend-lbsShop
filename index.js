@@ -13,8 +13,17 @@ app.use(express.json());
 const DB = {
   products: "./database/products.json",
   orders: "./database/orders.json",
-  admins: "./database/admins.json"
+  admins: "./database/admins.json",
+  users: "./database/users.json"
 };
+
+function readUsers() {
+  if (!fs.existsSync(DB.users)) return [];
+  return JSON.parse(fs.readFileSync(DB.users));
+}
+function writeUsers(data) {
+  fs.writeFileSync(DB.users, JSON.stringify(data, null, 2));
+}
 
 function read(file) {
   if (!fs.existsSync(file)) return [];
@@ -52,6 +61,42 @@ app.post("/api/admin/create", async (req, res) => {
 
   write(DB.admins, admins);
   res.json({ success: true });
+});
+
+app.post("/api/auth/register", async (req, res) => {
+  const users = readUsers();
+  const { name, phone, password } = req.body;
+  if (users.find(u => u.phone === phone))
+    return res.status(400).json({ error: "compte deja existant !"});
+  const hash = await bcrypt.hash(password, 10);
+
+  users.push({
+    id: crypto.randomUUID(),
+    name,
+    phone,
+    password: hash,
+    createdAt: new Date()
+  });
+  writeUsers(users);
+  res.json({ success: true });
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  const users = readUsers();
+  const { phone, password } = req.body;
+
+  const user = users.find(u => u.phone === phone);
+  if (!user) return res.status(401).json({ error: "compte introuvable"});
+  const ok = await bcrypt.compare(password, user.password)
+  if (!ok) return res.status(401).json({ error: "Mot de passe incorrecte"})
+  const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: "30d" });
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      phone: user.phone
+    }});
 });
 
 // 🔐 Login admin
