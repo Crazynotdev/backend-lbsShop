@@ -144,11 +144,11 @@ app.post("/api/order", (req, res) => {
 
   orders.push({
     id: crypto.randomUUID(),
+    userId: req.user.id,
     ...req.body,
-    status: "EN_ATTENTE",
+    status: "En ATTENTE..",
     createdAt: new Date()
   });
-
   write(DB.orders, orders);
   res.json({ success: true });
 });
