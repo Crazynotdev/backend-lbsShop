@@ -21,12 +21,6 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 // CONFIGURATION & SÉCURITÉ
 // ========================
 
-// Dossiers nécessaires
-const dirs = ["./db", "./uploads", "./logs"];
-dirs.forEach(dir => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-});
-
 // Base de données
 const DB = {
   products: "./db/products.json",
