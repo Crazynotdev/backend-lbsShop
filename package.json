@@ -1,31 +1,107 @@
 {
-  "name": "lbs-shop-api",
-  "version": "1.0.0",
-  "description": "API backend pour LBS SHOP - Administration et gestion des commandes",
+  "name": "lbs-shop-backend",
+  "version": "2.0.0",
+  "description": "API backend pour LBS SHOP - Site e-commerce drip Gabon",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "prod": "NODE_ENV=production node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node scripts/seed.js",
+    "backup": "node scripts/backup.js",
+    "clean": "node scripts/clean.js"
   },
   "keywords": [
+    "ecommerce",
     "api",
     "express",
-    "shop",
-    "ecommerce",
-    "admin"
+    "lbs-shop",
+    "gabon",
+    "drip"
   ],
-  "author": "LBS SHOP",
+  "author": {
+    "name": "CRAZY TECH",
+    "email": "contact@crazytech.ga",
+    "url": "https://crazytech.ga"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crazytech/lbs-shop-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crazytech/lbs-shop-api/issues"
+  },
+  "homepage": "https://lbs-shop.vercel.app",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "discord.js": "^14.25.1",
     "express": "^4.18.2",
-    "fs": "^0.0.1-security",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "qrcode": "^1.5.3"
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0",
+    "dotenv": "^16.3.1",
+    "fs-extra": "^11.1.1",
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.2",
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.1.0",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.3"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "server.js",
+      "routes/",
+      "models/",
+      "middleware/"
+    ],
+    "ignore": [
+      "uploads/*",
+      "db/*",
+      "logs/*"
+    ],
+    "ext": "js,json",
+    "delay": "1000"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "node": true,
+      "jest": true
+    },
+    "rules": {
+      "no-console": "off",
+      "consistent-return": "off"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "bracketSpacing": true
   }
 }
